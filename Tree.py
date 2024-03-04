@@ -19,18 +19,54 @@ class Tree(object):
 
 
 def LCA(root, p, q):
-    if root is None or p == root or q == root:
-        return root
+    if root is None or p == root or q == root:  # if p is root of q, p is the LCA, vice versa.
+        return root  # if p and not find in the brother of p, than must under p, so no need for searching on l and r
     else:
         l = LCA(root.left, p, q)
         r = LCA(root.right, p, q)
-    if l and r:  # both exist in l and r
+    if l and r:  # both exist in l and r, means l and r in different sub-tree seperately
         return root
     else:
         if l:
             return l
         else:
             return r
+
+
+def LCA_count(root, p, q, count):
+    if root is None:
+        return None, count
+    else:
+        l, count = LCA_count(root.left, p, q, count)
+        r, count = LCA_count(root.right, p, q, count)
+
+        if root.val == p.val or root.val == q.val:
+            return root, count + 1
+        elif l and r:
+            return root, count
+        elif l:
+            return l, count
+        elif r:
+            return r, count
+        else:
+            return None, count
+
+
+def LCA_depth(root):
+    if root is None:
+        return root, -1
+    else:
+        l, dl = LCA_depth(root.left)
+        r, dr = LCA_depth(root.right)
+        # print(root.val, dl, dr)
+        if l is None and r is None:
+            return root, 0
+        elif dl > dr:
+            return l, dl + 1
+        elif dr > dl:
+            return r, dr + 1
+        else:
+            return root, dl + 1  # or dr+1
 
 
 def preorderTraversal(root, returns):
