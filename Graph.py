@@ -58,6 +58,7 @@ def dfs_count_sum(root, avg_c):
 
 lst = []
 def dfs_bit(root, sum):
+
     if root is None:
         return
     elif root.left is None and root.right is None:
