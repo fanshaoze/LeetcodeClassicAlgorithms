@@ -26,7 +26,8 @@ def permuteUnique(nums):
 
 def next_permutation(l):
     n = len(l)
-    if n <= 1: return False
+    if n <= 1:
+        return False
     i = n - 1
     while True:
         j = i
