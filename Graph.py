@@ -134,45 +134,107 @@ def dfs_loop(i):
         fine[i] = 1  # never loop, can set as 1
         return True
 
-
 import heapq
+def prim(G, s):
+    P, Q = {}, [(0, None, s)]
+    while Q:
+        w, p, u = heapq.heappop(Q)
+        if u in P: continue # 如果目标点在生成树中，跳过
+        P[u] = p # 记录目标点不在生成树中
+        for v, w in G[u].items():
+            heapq.heappush(Q, (w, u, v)) # 将u点的出边入堆
+    return P
+# T = prim(G, 1)
+# sum_count = 0
+# for k, v in T.items():
+# if v !=None:
+# sum_count += G[k][v]
+#
+# print(sum_count)
+# print(T)
+# 结果为19
+# {1: None, 2: 1, 3: 1, 4: 3, 5: 6, 6: 4}
+
+def Dijkstra(G, start):
+    start = start - 1
+    inf = float('inf')
+    node_num = len(G)
+    visited = [0] * node_num
+    dis = {node: G[start][node] for node in range(node_num)}
+    parents = {node: -1 for node in range(node_num)}
+    visited[start] = 1
+    last_point = start
+
+    for i in range(node_num - 1):
+        min_dis = inf
+        for j in range(node_num):
+            if visited[j] == 0 and dis[j] < min_dis:
+                min_dis = dis[j]
+                last_point = j
+        visited[last_point] = 1
+        if i == 0:
+            parents[last_point] = start + 1
+        for k in range(node_num):
+            if G[last_point][k] < inf and dis[k] > dis[last_point] + G[last_point][k]:
+                dis[k] = dis[last_point] + G[last_point][k]
+                parents[k] = last_point + 1
+
+    return {key + 1: values for key, values in dis.items()}, \
+           {key + 1: values for key, values in parents.items()}
 
 
-def prim(graph):
-    n = len(graph)
-    mst = []  # 最小生成树的边
-    visited = [False] * n
-    min_heap = [(0, 0)]  # (权重, 节点)
-    total_cost = 0
-
-    while min_heap:
-        weight, u = heapq.heappop(min_heap)
-
-        if visited[u]:
-            continue
-
-        visited[u] = True
-        total_cost += weight
-        if weight > 0:
-            mst.append((prev_node, u, weight))
-
-        for v, edge_weight in enumerate(graph[u]):
-            if not visited[v] and edge_weight < float('inf'):
-                heapq.heappush(min_heap, (edge_weight, v))
-                prev_node = u
-
-    return mst, total_cost
+if __name__ == '__main__':
+    inf = float('inf')
+    G = [[0, 1, 12, inf, inf, inf],
+         [inf, 0, 9, 3, inf, inf],
+         [inf, inf, 0, inf, 5, inf],
+         [inf, inf, 4, 0, 13, 15],
+         [inf, inf, inf, inf, 0, 4],
+         [inf, inf, inf, inf, inf, 0]]
+    dis, parents = Dijkstra(G, 1)
+    print("dis: ", dis)
+    print("parents: ", parents)
 
 
-# 示例邻接矩阵
-graph = [
-    [0, 2, float('inf'), 1, float('inf')],
-    [2, 0, 3, 2, float('inf')],
-    [float('inf'), 3, 0, float('inf'), 1],
-    [1, 2, float('inf'), 0, 4],
-    [float('inf'), float('inf'), 1, 4, 0]
-]
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices  # 图的顶点数
+        self.edges = []    # 存储图的边
 
-mst, total_cost = prim(graph)
-print("最小生成树的边:", mst)
-print("最小生成树的总权重:", total_cost)
+    def add_edge(self, u, v, w):
+        self.edges.append((u, v, w))  # 添加边 (u, v) 和权重 w
+
+    def bellman_ford(self, src):
+        # 初始化距离数组，所有顶点的距离设为正无穷
+        dist = [float("inf")] * self.V
+        dist[src] = 0
+
+        # 逐步更新距离数组
+        for _ in range(self.V - 1):
+            for u, v, w in self.edges:
+                if dist[u] != float("inf") and dist[u] + w < dist[v]:
+                    dist[v] = dist[u] + w
+
+        # 检测负权重环路
+        for u, v, w in self.edges:
+            if dist[u] != float("inf") and dist[u] + w < dist[v]:
+                print("图中存在负权重环路")
+                return
+
+        # 打印最终的最短路径
+        print("顶点 到 源点的最短距离")
+        for i in range(self.V):
+            print(f"{i}\t\t{dist[i]}")
+
+# 使用示例
+g = Graph(5)
+g.add_edge(0, 1, -1)
+g.add_edge(0, 2, 4)
+g.add_edge(1, 2, 3)
+g.add_edge(1, 3, 2)
+g.add_edge(1, 4, 2)
+g.add_edge(3, 2, 5)
+g.add_edge(3, 1, 1)
+g.add_edge(4, 3, -3)
+
+g.bellman_ford(0)
