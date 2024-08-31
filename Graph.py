@@ -15,6 +15,8 @@ def bfs_level(root):
             if node.right:
                 tmp_q.append(node.right)
         queue = tmp_q
+
+
 def bfs_level_2(root):
     # for + pop version
     queue = [root]
@@ -25,9 +27,10 @@ def bfs_level_2(root):
                 queue.append(current.left)
                 queue.append(current.right)
 
+
 def bfs_depth(target, k, ret, g):
     """
-
+    bfs but record depth in queue
     :param target: target node
     :param k: distance
     :param ret: return
@@ -44,7 +47,8 @@ def bfs_depth(target, k, ret, g):
             ret.append(n.val)
         for nei in g[n]:
             if nei not in visited:
-                q.append((nei, lev+1)) # record the level
+                q.append((nei, lev + 1))  # record the level
+
 
 def graph_row_column_dfs(grid, i, j, m, n):  # filled with '0' or '1'
     if i < 0 or j < 0 or i >= m or j >= n:
@@ -96,21 +100,26 @@ def dfs_count_sum(root, avg_c):
         print(sub_sum, count, avg_c)
     return sub_sum, count, avg_c
 
-lst = []
-def dfs_bit(root, sum):
 
+lst = []
+
+
+def dfs_bit(root, sum):
     if root is None:
         return
     elif root.left is None and root.right is None:
-        lst.append(10*sum+root.val)
+        lst.append(10 * sum + root.val)
     else:
-        cur = 10*sum+root.val
+        cur = 10 * sum + root.val
         dfs_bit(root.left, cur)
         dfs_bit(root.right, cur)
+
 
 num_nodes = 10
 graph = defaultdict(list)
 fine = [0 for _ in range(num_nodes)]
+
+
 def dfs_loop(i):
     if fine[i] == 1:
         # no loop if want to take class i
@@ -122,5 +131,48 @@ def dfs_loop(i):
         for j in graph[i]:
             dup = dfs_loop(j)
             if dup == False: return False
-        fine[i] = 1 # never loop, can set as 1
+        fine[i] = 1  # never loop, can set as 1
         return True
+
+
+import heapq
+
+
+def prim(graph):
+    n = len(graph)
+    mst = []  # 最小生成树的边
+    visited = [False] * n
+    min_heap = [(0, 0)]  # (权重, 节点)
+    total_cost = 0
+
+    while min_heap:
+        weight, u = heapq.heappop(min_heap)
+
+        if visited[u]:
+            continue
+
+        visited[u] = True
+        total_cost += weight
+        if weight > 0:
+            mst.append((prev_node, u, weight))
+
+        for v, edge_weight in enumerate(graph[u]):
+            if not visited[v] and edge_weight < float('inf'):
+                heapq.heappush(min_heap, (edge_weight, v))
+                prev_node = u
+
+    return mst, total_cost
+
+
+# 示例邻接矩阵
+graph = [
+    [0, 2, float('inf'), 1, float('inf')],
+    [2, 0, 3, 2, float('inf')],
+    [float('inf'), 3, 0, float('inf'), 1],
+    [1, 2, float('inf'), 0, 4],
+    [float('inf'), float('inf'), 1, 4, 0]
+]
+
+mst, total_cost = prim(graph)
+print("最小生成树的边:", mst)
+print("最小生成树的总权重:", total_cost)

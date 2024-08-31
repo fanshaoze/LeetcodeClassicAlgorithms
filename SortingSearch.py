@@ -15,7 +15,7 @@ def binary_search(sorted_nums, l, r, val):
         if sorted_nums[mid] == val:
             return mid
         elif sorted_nums[mid] > val:
-            r = mid - 1
+            r = mid + 1
         else:
             l = mid + 1
     return None
@@ -80,3 +80,10 @@ def binary_search_find_peak(nums):
 
 partition([0, 10, 8, 7, 3, 9, 6, 5], 0, 7)
 print(binary_search([i for i in range(10)], 0, 7, 5))
+#
+# (0, 6, 3, 7, [3, 4, 6, 7])
+# (0, 2, 1, 5, [2, 2, 3, 4])
+#
+# (0, 6, 3, 7, [3, 4, 6, 7])
+# (0, 3, 1, 5, [2, 2, 3, 4])
+# (2, 3, 2, 6, [2, 3, 4, 6])

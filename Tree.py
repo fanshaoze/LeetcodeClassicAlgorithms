@@ -18,6 +18,9 @@ class Tree(object):
                 root = root.left
 
 
+TreeNode(1, None, None)
+
+
 def LCA(root, p, q):
     if root is None or p == root or q == root:  # if p is root of q, p is the LCA, vice versa.
         return root  # if p and not find in the brother of p, than must under p, so no need for searching on l and r
@@ -78,6 +81,23 @@ def preorderTraversal(root, returns):
         preorderTraversal(root.right, returns)
     return returns
 
+def preorderTraversal_stack(root):
+    if not root:
+        return []
+
+    stack = [root]
+    result = []
+
+    while stack:
+        node = stack.pop()
+        result.append(node.val)
+        if node.right:
+            stack.append(node.right)
+        if node.left:
+            stack.append(node.left)
+
+    return result
+
 
 def inorderTraversal_stack(root):
     result = []
@@ -96,22 +116,6 @@ def inorderTraversal_stack(root):
     return result
 
 
-def preorderTraversal_stack(root):
-    if not root:
-        return []
-
-    stack = [root]
-    result = []
-
-    while stack:
-        node = stack.pop()
-        result.append(node.val)
-        if node.right:
-            stack.append(node.right)
-        if node.left:
-            stack.append(node.left)
-
-    return result
 
 
 def postorderTraversal_stack(root):

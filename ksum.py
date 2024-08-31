@@ -8,7 +8,8 @@ class Solution(object):
         def kSum(nums, target, k):
             res = []
             # If we have run out of numbers to add, return res.
-            if not nums: return res
+            if not nums:
+                return res
             average_value = target // k
             if average_value < nums[0] or nums[-1] < average_value:
                 return res
