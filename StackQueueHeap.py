@@ -27,6 +27,42 @@ def main():
     return
 
 
+# stack but linklist
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+
+class Stack:
+    def __init__(self):
+        self.top = None
+
+    def is_empty(self):
+        return self.top is None
+
+    def insert(self, v):
+        node = Node(v)
+        node.next = self.top
+        self.top = node
+
+    def pop(self):
+        if self.is_empty():
+            return None
+        else:
+            cur = self.top
+            self.top = self.top.next
+            return cur
+
+# monotone Stack
+def monotoneIncreasingStack(nums):
+    stack = []
+    for num in nums:
+        while stack and num >= stack[-1]:
+            stack.pop()
+        stack.append(num)
+
+
 # stack: list pop from tail, list append from tail
 
 # queue: list append from tail, pop with list.pop(0)
