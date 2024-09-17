@@ -506,25 +506,38 @@ def longest_substring_without_duplication(str):
 print(longest_substring_without_duplication('arabcacfr'))
 
 
-'''
-题目：我们把只包含因子2、3和5的数称作丑数（Ugly Number）。求按从小到大的顺序的第N个丑数。
-例如6、8都是丑数，但14不是，因为它包含因子7。习惯上我们把1当做是第一个丑数。
-'''
-"""
-maintain the next one that is larger than current, update
-"""
 
-def get_ugly(index):
-    uglys = [1 for i in range(index)]
-    t2_id, t3_id, t5_id = 0, 0, 0
-    for i in range(1, index):
-        uglys[i] = min(uglys[t2_id]*2, uglys[t3_id]*3, uglys[t5_id]*5)
-        while uglys[t2_id]*2 <= uglys[i]:
-            t2_id+=1
-        while uglys[t3_id]*3 <= uglys[i]:
-            t3_id+=1
-        while uglys[t5_id]*5 <= uglys[i]:
-            t5_id+=1
-    print(uglys)
-    return uglys[-1]
-get_ugly(14)
+'''
+题目：输入一棵二叉树的根结点，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+'''
+
+
+class Solution:
+    def tree_depth(self, root):
+        if not root:
+            return 0
+        return max(self.tree_depth(root.left), self.tree_depth(root.right)) + 1
+
+'''
+题目：输入两个树结点，求它们的最低公共祖先。
+'''
+
+
+def get_last_common_parent(root, node1, node2):
+    if root is None:
+        return None
+    if root == node1 or root == node2:
+        return root
+    left_result = get_last_common_parent(root.left, node1, node2)
+    right_result = get_last_common_parent(root.right, node1, node2)
+    # A 和 B 一边一个
+    if left_result and right_result:
+        return root
+    # 左子树有一个点或者左子树有LCA
+    if left_result:
+        return left_result
+    # 右子树有一个点或者右子树有LCA
+    if right_result:
+        return right_result
+    # 左右子树都没有
+    return None
