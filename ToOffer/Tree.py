@@ -541,3 +541,5 @@ def get_last_common_parent(root, node1, node2):
         return right_result
     # 左右子树都没有
     return None
+
+# Finish
