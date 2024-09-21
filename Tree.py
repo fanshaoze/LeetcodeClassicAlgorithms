@@ -29,11 +29,10 @@ def LCA(root, p, q):
         r = LCA(root.right, p, q)
     if l and r:  # both exist in l and r, means l and r in different sub-tree seperately
         return root
+    elif l:
+        return l
     else:
-        if l:
-            return l
-        else:
-            return r
+        return r
 
 
 def LCA_count(root, p, q, count):
@@ -81,39 +80,34 @@ def preorderTraversal(root, returns):
         preorderTraversal(root.right, returns)
     return returns
 
-def preorderTraversal_stack(root):
-    if not root:
-        return []
-
-    stack = [root]
-    result = []
-
-    while stack:
-        node = stack.pop()
-        result.append(node.val)
-        if node.right:
-            stack.append(node.right)
-        if node.left:
-            stack.append(node.left)
-
-    return result
-
-
-def inorderTraversal_stack(root):
-    result = []
+def preorder_stack(root):
+    node = root
     stack = []
-    current = root
+    while node or stack:
+        while node:
+            stack.append(node)
+            print(node.val)
+            node = node.left
+        node = stack.pop()
+        if root.right:
+            node = node.right
+        else:
+            node = None
 
-    while current or stack:
-        while current:
-            stack.append(current)
-            current = current.left
 
-        current = stack.pop()
-        result.append(current.val)
-        current = current.right  # use none to control the pop
-
-    return result
+def inorder_stack(root):
+    node = root
+    stack = []
+    while node or stack:
+        while node:
+            stack.append(node)
+            node = node.left
+        node = stack.pop()
+        print(node.val)
+        if node.right:
+            node = node.right
+        else:
+            node = None
 
 
 
@@ -177,10 +171,15 @@ def find_path_to_root(root, target):
 
 
 def main():
-    tree = Tree([i for i in range(7)])
-    root = tree.root
+    l = TreeNode(5)
+    r = TreeNode(7)
+    c0 = TreeNode(6, l, r)
+    l = TreeNode(9)
+    r = TreeNode(11)
+    c1 = TreeNode(10, l, r)
+    root = TreeNode(8, c0, c1)
     print(preorderTraversal(root, []))
-    print(inorderTraversal_stack(root))
+    print(inorder_stack(root))
     print(postorderTraversal_stack(root))
     print(find_path_to_root(root, root.left.left.right))
     print(LCA(root, root.left.right, root.left.left.left).val)

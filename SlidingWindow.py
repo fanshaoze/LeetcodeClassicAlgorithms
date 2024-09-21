@@ -1,5 +1,3 @@
-
-
 def nextLarger(nums):
     stack = []
     ret = [0] * len(nums)
@@ -32,9 +30,9 @@ def characterReplacement(s, k):
         for r in range(len(s)):
             c_dic[s[r]] += 1
             max_count = max([max_count, c_dic[s[r]]])
-            if max_count+k>=r-l+1:
-                max_l = max([max_l, r-l+1])
+            if max_coun t + k > = r - l + 1:
+                max_l = max([max_l, r - l + 1])
             else:
                 c_dic[s[l]] -= 1
-                l+=1
+                l += 1
     return max_l

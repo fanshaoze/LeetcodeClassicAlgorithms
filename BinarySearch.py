@@ -78,8 +78,28 @@ def binary_search_find_peak(nums):
             return mid
 
 
+def search_in_rotated(nums, target):
+    l = 0
+    r = len(nums) - 1
+    while l <= r:
+        mid = l + (r - l) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] <= nums[r]:
+            if nums[mid] < target <= nums[r]:
+                l = mid + 1
+            else:
+                r = mid - 1
+        elif nums[mid] >= nums[l]:
+            if nums[mid] > target >= nums[l]:
+                r = mid - 1
+            else:
+                l = mid + 1
+
+
 partition([0, 10, 8, 7, 3, 9, 6, 5], 0, 7)
 print(binary_search([i for i in range(10)], 0, 7, 5))
+print(search_in_rotated([7, 8, 9, 0, 1, 2, 3, 4, 5, 6], 7))
 #
 # (0, 6, 3, 7, [3, 4, 6, 7])
 # (0, 2, 1, 5, [2, 2, 3, 4])

@@ -44,4 +44,23 @@ def next_permutation(l):
             return False
 
 
+def permute2(nums):
+    # time consuming
+    # nums = [0, 1]
+    ret = []
+
+    def add_perm(lst, cur):
+        if len(cur) == len(nums):
+            ret.append(cur)
+        if lst == []:
+            return
+        else:
+            for i in range(len(lst)):
+                add_perm(lst[:i] + lst[i + 1:], cur + [lst[i]])
+
+    add_perm(nums, [])
+    return ret
+
+
 print(permuteUnique([1, 1, 2]))
+print(permute2([0, 1, 2]))
